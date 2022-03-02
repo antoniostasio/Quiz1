@@ -15,7 +15,7 @@ public:
     std::vector<std::string> getAnswers() override {
         std::vector<std::string> answers;
         answers.push_back(correct_answer);
-        answers.insert(answers.end(), wrong_answers.begin(), wrong_answers.end());
+        answers.insert(std::end(answers), std::begin(wrong_answers), std::end(wrong_answers));
         // for(auto ans : wrong_answers) {
             // answers.push_back(ans);
         // }
