@@ -1,9 +1,13 @@
+#pragma once
+
 #include "Question.h"
 
 class QuestionMultipleChoice: public Question {
 public:
     QuestionMultipleChoice(std::string content): Question(content) {};
     QuestionMultipleChoice(QuestionMultipleChoice& qm): Question(qm.getQuestionText()) {};
+    
+    
     void addWrongAnswer(std::string answer) {
         wrong_answers.push_back(answer);
     }
@@ -21,6 +25,10 @@ public:
         // }
         
         return answers;
+    }
+    
+    std::string getSolution() override {
+        return correct_answer;
     }
 private:
     std::vector<std::string> wrong_answers;
