@@ -47,6 +47,8 @@
         "vector": "cpp",
         "fstream": "cpp",
         "random": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "set": "cpp",
+        "xtree": "cpp"
     }
 }
