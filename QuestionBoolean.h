@@ -5,12 +5,13 @@
 class QuestionBoolean: public Question {
 public:
     QuestionBoolean(std::string content): Question(content) {};
-    QuestionBoolean(QuestionBoolean& qb): Question(qb.getQuestionText()) {
-        setQuestionText(qb.getQuestionText() );
+    QuestionBoolean(QuestionBoolean& qb): Question(qb.GetQuestionText()) {
+        SetQuestionText(qb.GetQuestionText() );
     };
+    QuestionBoolean(const std::string& content, bool solution) 
+        : Question(content), _solution(solution) {};
     
-    
-    std::vector<std::string> getAnswers() override {
+    std::vector<std::string> GetAnswers() override {
         std::vector<std::string> answers;
         answers.push_back("true");
         answers.push_back("false");
@@ -18,18 +19,18 @@ public:
         return answers;
     }
     
-    
-    void addSolution(bool sol) {
-        solution = sol;
+    // TODO add constructor with solution
+    void setSolution(bool sol) {
+        _solution = sol;
     }
     
     
-    std::string getSolution() override {
-        if(solution)
+    std::string GetSolution() override {
+        if(_solution)
             return "true";
         else
             return "false";
     }
 private:
-    bool solution;
+    bool _solution;
 };

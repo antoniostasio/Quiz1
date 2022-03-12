@@ -3,92 +3,90 @@
 #include <fstream>
 #include <vector>
 #include <array>
-#include <set>
+#include <unordered_set>
 #include <string>
-#include <cstdlib>
 #include <random>
 #include "Question.h"
 #include "QuestionBoolean.h"
 #include "QuestionMultipleChoice.h"
 
+#define BOOLEAN_TYPE "b"
+#define MULTIPLE_CHOICE "m"
+
+using std::string;
+
+
 class QuestionManager {
-    std::vector<Question *> questions;
     
-    const std::array<std::string, 2> QuestionTypes = {"m", "b"};
+    std::vector<Question *> _questions;
     
-    Question* questionOfType(const std::string& questionToken, std::ifstream& txtfile) {
-        std::string line;
-        // build boolean question
-        if(questionToken.compare("b") == 0) {
-            std::getline(txtfile, line);
-            QuestionBoolean *qb = new QuestionBoolean(line);
-            std::getline(txtfile, line);
-            bool solution = false;
-            if(line.compare("true") == 0){
-                solution = true;
-            }
-            qb->addSolution(solution);
-            return qb;
-        }
-        
-        // build multiple choice question
-        else if(questionToken.compare("m") == 0) {
-            std::getline(txtfile, line);
-            QuestionMultipleChoice *qm = new QuestionMultipleChoice(line);
+    const std::array<string, 2> QuestionTypes = {BOOLEAN_TYPE, MULTIPLE_CHOICE};
+    
+    // enum QuestionType : char {MULTIPLE = 'm', BOOLEAN = 'b'};
+    
+    
+    Question* _questionOfType(const string& questionType, const std::vector<string>& questionData) {
+        if(questionData.size() > 1) {
+            string whatIsAsked = questionData.front();
+            string solutionText = questionData[1];
             
-            std::getline(txtfile, line);
-            qm->setCorrectAnswer(line);
-            
-            std::streampos savedPos = txtfile.tellg();
-            while(std::getline(txtfile, line)) {
-                // check if no more answers
-                bool foundNextObject = false;
-                for(const auto& qtype : QuestionTypes) {
-                    int comparisonResult = line.compare(qtype);
-                    if(comparisonResult == 0) {
-                        foundNextObject = true;
-                        break; // found: no need to keep checking
-                    }
+            // build boolean question
+            if(questionType.compare(BOOLEAN_TYPE) == 0) {
+                bool solution = false;
+                if(solutionText.compare("true") == 0) {
+                    solution = true;
                 }
-                if(foundNextObject) {
-                    txtfile.seekg(savedPos);
-                    break;
-                }
-                qm->addWrongAnswer(line);
-                savedPos = txtfile.tellg();
+                QuestionBoolean *qb = new QuestionBoolean(whatIsAsked, solution);
+                return qb;
             }
-            return qm;
+            
+            // build multiple choice question
+            else if(questionType.compare(MULTIPLE_CHOICE) == 0) {
+                QuestionMultipleChoice *qm = new QuestionMultipleChoice(whatIsAsked);
+                qm->SetCorrectAnswer(solutionText);
+                
+                for(int i = 2; i< questionData.size(); ++i) {
+                    qm->AddWrongAnswer(questionData[i]);
+                }
+                return qm;
+            }
         }
         return nullptr;
     }
     
     
-    void LoadDataFromFile(std::string textfileName) {
+    void LoadDataFromFile(const string& textfileName) {
         std::ifstream txtfile;
         txtfile.open(textfileName);
-
-        std::string line;
+        
+        string line;
         while(std::getline(txtfile, line)) {
-            for(const auto& qtype : QuestionTypes) {
-                bool foundNewQuestion = line.compare(qtype) == 0;
-                if(foundNewQuestion) {
-                    Question *newQuestion = questionOfType(qtype, txtfile);
+            string questionType = line;
+            std::vector<string> linesBuffer;
+            while(std::getline(txtfile, line)) {
+                bool endOfQuestion = line.compare("") == 0;
+                if(endOfQuestion) {
+                    Question *newQuestion = _questionOfType(questionType, linesBuffer);
                     if(newQuestion != nullptr)
-                        questions.push_back(newQuestion);
+                        _questions.push_back(newQuestion);
                     break;
                 }
+                linesBuffer.push_back(line);
             }
         }
         txtfile.close();
     }
     
+    
 public:
-    QuestionManager(std::string textfile_name) {
+    QuestionManager(const string& textfile_name) {
         LoadDataFromFile(textfile_name);
     }
     
+    QuestionManager(const QuestionManager& qm) = delete;
+    
     ~QuestionManager() {
-        for(auto q : questions) {
+        for(auto q : _questions) {
             delete q;
         }
     }
@@ -97,11 +95,11 @@ public:
     std::vector<Question *> GetQuestionSet(int desiredSize = 5) {
         std::vector<Question *> selection;
         
-        int questionsCount = questions.size();
+        int questionsCount = _questions.size();
         
         std::random_device rng("default");
                
-        std::set<int> selectedIndexes;
+        std::unordered_set<int> selectedIndexes;
         if(questionsCount < desiredSize)
             desiredSize = questionsCount;
             
@@ -109,7 +107,7 @@ public:
             selectedIndexes.insert(rng() % questionsCount);
         }
         for(auto index : selectedIndexes) {
-            selection.push_back(questions.at(index));
+            selection.push_back(_questions.at(index));
         }
         // std::shuffle(std::begin(selection), std::end(selection), rng); 
         return selection;

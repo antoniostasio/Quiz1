@@ -26,9 +26,9 @@ void StartQuizWith(const vector<Question *> &questions) {
         Question *qs = questions.at(n);
         
         cout << "Question " << (n+1) << '\n' ;
-        cout << qs->getQuestionText() << '\n' << endl;
+        cout << qs->GetQuestionText() << '\n' << endl;
         
-        vector<string> &answers = qs->getAnswers();
+        vector<string> &answers = qs->GetAnswers();
         std::random_device rng("default");
         std::shuffle(std::begin(answers), std::end(answers), rng);
         
@@ -44,7 +44,7 @@ void StartQuizWith(const vector<Question *> &questions) {
         bool correct = false;
         if(selection > 0 && selection <= answers.size()) {
             const string& selected_answer = answers.at(selection-1);
-            const string& solution = qs->getSolution();
+            const string& solution = qs->GetSolution();
             if(solution.compare(selected_answer) == 0) {
                 correct = true;
                 ++score;
@@ -60,16 +60,13 @@ void StartQuizWith(const vector<Question *> &questions) {
 }
 
 int main() {
-    QuestionManager questionManager("domande.txt");
+    // QuestionManager questionManager("domande.txt");
+    QuestionManager questionManager("domande2.txt");
     vector<Question *> questions = questionManager.GetQuestionSet();
-    
-    std::random_device rng("default");
-    std::shuffle(std::begin(questions), std::end(questions), rng);
     
     // Quiz taking
     ClearTerminal();
     StartQuizWith(questions);
-    
     
     return 0;
 }

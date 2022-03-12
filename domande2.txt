@@ -1,0 +1,41 @@
+b
+Se il veicolo è sovraccarico, per evitare problemi agli ammortizzatori è sufficiente aumentare la pressione dei pneumatici di mezzo bar
+true
+
+b
+La distanza di sicurezza deve essere maggiore se si percorre la corsia d'emergenza
+true
+
+m
+"Le persone che suonano il violino sono determinate; Giacomo è una persona determinata". Quale delle affermazioni elencate consentirebbe di dedurre che "Giacomo suona il violino"?
+Tutte le persone determinate suonano il violino
+Alcune persone determinate suonano il violino
+Tutte le persone che suonano il violino sono determinate
+Nessuna
+
+m
+In quale strumento d'orientamento si trova l'ago magnetico?
+Bussola
+Trapano
+Martello
+
+m
+Quanto fa 1099 + 2?
+1101
+1102
+1111
+1011
+1012
+
+m
+Secondo gli studiosi la ruota fu inventata nell'antica Mesopotamia da quale civiltà?
+Sumeri
+Babilonesi
+Assiri
+
+m
+Quanto dista dalla Terra alla Luna?
+384.400 km
+413.700 km
+399.800 km
+406.200 km

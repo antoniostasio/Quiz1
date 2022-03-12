@@ -49,6 +49,9 @@
         "random": "cpp",
         "algorithm": "cpp",
         "set": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "unordered_set": "cpp",
+        "xhash": "cpp",
+        "list": "cpp"
     }
 }

@@ -7,18 +7,19 @@
 
 class Question {
 public:
-    Question(std::string content): text(content) {};
-    void setQuestionText(std::string txt) {
-        text = txt;
+    Question(std::string content): _text(content) {};
+    
+    void SetQuestionText(const std::string& text) {
+        _text = text;
     }
     
-    std::string getQuestionText() {
-        return text;
+    std::string GetQuestionText() {
+        return _text;
     }
     
-    virtual std::vector<std::string> getAnswers() = 0;
+    virtual std::vector<std::string> GetAnswers() = 0;
     
-    virtual std::string getSolution() = 0;
+    virtual std::string GetSolution() = 0;
 private:
-    std::string text;
+    std::string _text;
 };
